@@ -1,20 +1,27 @@
-require('dotenv').config();
-const express = require('express');
+import 'dotenv/config';
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const authRoutes = require('./routes/auth.routes');
-const messageRoutes = require('./routes/message.routes');
-// const connectDB = require('./config/db');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+import authRoutes from './routes/auth.routes.js';
+import messageRoutes from './routes/message.routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// connectDB();
-
-app.use(express.json());
-
+app.use(express.json(), express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
 
-app.listen(PORT, () => {
-  console.log(`server running on http://localhost:${PORT}`);
-});
+// Serve React build
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+  app.get('*', (req, res) =>
+    res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'))
+  );
+}
+
+app.listen(PORT, () => console.log(`Server running at localhost:${PORT}`));

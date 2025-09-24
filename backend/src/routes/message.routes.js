@@ -1,17 +1,18 @@
-const express = require('express');
+import express from "express";
 
 const router = express.Router();
 
-router.get('/send', (req, res) => {
-  res.send('Send message endpoint');
+// Example unique routes
+router.get("/send", (req, res) => {
+  res.send("Send message endpoint");
 });
 
-router.get('/send', (req, res) => {
-  res.send('Send message endpoint');
+router.get("/all", (req, res) => {
+  res.send("Get all messages endpoint");
 });
 
-router.get('/send', (req, res) => {
-  res.send('Send message endpoint');
+router.post("/send", (req, res) => {
+  res.send("Send message via POST endpoint");
 });
 
-module.exports = router;
+export default router;
