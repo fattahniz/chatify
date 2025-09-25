@@ -1,26 +1,28 @@
-import 'dotenv/config';
-import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import "dotenv/config";
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+import connectDB from "./lib/db.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-import authRoutes from './routes/auth.routes.js';
-import messageRoutes from './routes/message.routes.js';
+import authRoutes from "./routes/auth.route.js";
+import messageRoutes from "./routes/message.route.js";
 
 const app = express();
+connectDB();
 const PORT = process.env.PORT || 4000;
 
 app.use(express.json(), express.urlencoded({ extended: true }));
-app.use('/api/auth', authRoutes);
-app.use('/api/messages', messageRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/messages", messageRoutes);
 
 // Serve React build
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../../frontend/dist')));
-  app.get('*', (req, res) =>
-    res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'))
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../../frontend/dist")));
+  app.get("*", (req, res) =>
+    res.sendFile(path.join(__dirname, "../../frontend", "dist", "index.html"))
   );
 }
 
