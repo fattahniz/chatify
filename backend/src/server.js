@@ -1,18 +1,17 @@
-import "dotenv/config";
+import { ENV } from "./lib/env.js";
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import connectDB from "./lib/db.js";
+import authRoutes from "./routes/auth.route.js";
+import messageRoutes from "./routes/message.route.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-import authRoutes from "./routes/auth.route.js";
-import messageRoutes from "./routes/message.route.js";
-
 const app = express();
 
-const PORT = process.env.PORT || 4000;
+const PORT = ENV.PORT || 4000;
 
 async function init() {
   try {
@@ -37,7 +36,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
 // Serve React build
-if (process.env.NODE_ENV === "production") {
+if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../../frontend/dist")));
   app.get("*", (req, res) =>
     res.sendFile(path.join(__dirname, "../../frontend", "dist", "index.html"))
