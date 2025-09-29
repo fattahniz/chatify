@@ -1,18 +1,20 @@
 import express from "express";
+import {
+  getAllContacts,
+  getChatPartners,
+  getMessagesByUserId,
+  sendMessage,
+} from "../controllers/message.controller.js";
+import { protectRoute } from "../middlewares/auth.middleware.js";
+import { arcjetProtection } from "../middlewares/arcjet.middleware.js";
 
 const router = express.Router();
 
-// Example unique routes
-router.get("/send", (req, res) => {
-  res.send("Send message endpoint");
-});
+router.use(arcjetProtection, protectRoute);
 
-router.get("/all", (req, res) => {
-  res.send("Get all messages endpoint");
-});
-
-router.post("/send", (req, res) => {
-  res.send("Send message via POST endpoint");
-});
+router.get("/contacts", getAllContacts);
+router.get("/chats", getChatPartners);
+router.get("/:id", getMessagesByUserId);
+router.post("/send/:id", sendMessage);
 
 export default router;
