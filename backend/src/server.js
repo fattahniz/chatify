@@ -17,6 +17,7 @@ const PORT = ENV.PORT || 4000;
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 app.use(cookieParser());
 
 // 🔑 very important: allow cookies from frontend
